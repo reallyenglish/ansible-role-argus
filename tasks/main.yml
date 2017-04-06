@@ -5,18 +5,13 @@
 
 - include: "install-{{ ansible_os_family }}.yml"
 
+- include: "configure-{{ ansible_os_family }}.yml"
+
+- include: "configure-sasl.yml"
+
 - name: Create log directory
   file:
     path: "{{ argus_log_dir }}"
-    mode: 0755
-    owner: "{{ argus_user }}"
-    group: "{{ argus_group }}"
-    state: directory
-  notify: Restart argus
-
-- name: Create db directory
-  file:
-    path: "{{ argus_db_dir }}"
     mode: 0755
     owner: "{{ argus_user }}"
     group: "{{ argus_group }}"
@@ -27,7 +22,8 @@
   template:
     src: argus.conf.j2
     dest: "{{ argus_conf_file }}"
-    validate: echo %s
+    mode: 0644
+    # validate: echo %s
   notify: Restart argus
 
 - name: Start argus

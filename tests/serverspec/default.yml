@@ -2,4 +2,33 @@
   roles:
     - ansible-role-argus
   vars:
-    argus_config: ""
+    argus_sasl_user:
+      foo:
+        domain: reallyenglish.com
+        password: password
+        appname: argus
+        state: present
+    argus_config:
+      ARGUS_CHROOT: "{{ argus_log_dir }}"
+      ARGUS_FLOW_TYPE: Bidirectional
+      ARGUS_FLOW_KEY: CLASSIC_5_TUPLE
+      ARGUS_DAEMON: "yes"
+      ARGUS_MONITOR_ID: "{{ ansible_fqdn }}"
+      ARGUS_ACCESS_PORT: 561
+      ARGUS_BIND_IP: 127.0.0.1
+      ARGUS_INTERFACE: "ind:{{ ansible_default_ipv4.interface }}"
+      ARGUS_SETUSER_ID: "{{ argus_user }}"
+      ARGUS_SETGROUP_ID: "{{ argus_group }}"
+      ARGUS_OUTPUT_FILE: "{{ argus_log_dir }}/argus.ra"
+      ARGUS_FLOW_STATUS_INTERVAL: 5
+      ARGUS_MAR_STATUS_INTERVAL: 60
+      ARGUS_DEBUG_LEVEL: 0
+      ARGUS_GENERATE_RESPONSE_TIME_DATA: "yes"
+      ARGUS_GENERATE_PACKET_SIZE: "yes"
+      ARGUS_GENERATE_APPBYTE_METRIC: "yes"
+      ARGUS_GENERATE_TCP_PERF_METRIC: "yes"
+      ARGUS_GENERATE_BIDIRECTIONAL_TIMESTAMPS: "yes"
+      ARGUS_FILTER: ip
+      ARGUS_TRACK_DUPLICATES: "yes"
+      ARGUS_SET_PID: "yes"
+      ARGUS_PID_PATH: "{{ argus_pid_dir }}"

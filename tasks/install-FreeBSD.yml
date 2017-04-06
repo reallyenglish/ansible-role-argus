@@ -2,5 +2,23 @@
 
 - name: Install argus
   pkgng:
-    name: argus
+    name: "{{ argus_package }}"
     state: present
+
+- name: Install argus client
+  pkgng:
+    name: "{{ argus_client_package }}"
+    state: present
+
+- name: Create argus group
+  group:
+    name: "{{ argus_group }}"
+
+- name: Add argus user
+  user:
+    name: "{{ argus_user }}"
+    group: "{{ argus_group }}"
+    shell: /usr/sbin/nologin
+    createhome: no
+    state: present
+    home: "{{ argus_log_dir }}"

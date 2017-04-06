@@ -1,0 +1,9 @@
+# Managed by ansible
+
+{% for k, v in argus_config | dictsort %}
+{% if v is number %}
+{{ k }}={{ v }}
+{% else %}
+{{ k }}="{{ v }}"
+{% endif %}
+{% endfor %}
