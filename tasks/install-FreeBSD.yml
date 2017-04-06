@@ -1,0 +1,6 @@
+---
+
+- name: Install argus
+  pkgng:
+    name: argus
+    state: present

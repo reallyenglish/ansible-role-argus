@@ -1,0 +1,8 @@
+argus_user: argus
+argus_group: argus
+argus_log_dir: /var/log/argus
+argus_db_dir: "{{ __argus_db_dir }}"
+argus_service: argus
+argus_conf_dir: "{{ __argus_conf_dir }}"
+argus_conf_file: "{{ __argus_conf_dir }}/argus.conf"
+argus_flags: ""

@@ -1,0 +1,6 @@
+---
+
+- name: Restart argus
+  service:
+    name: argus
+    state: restarted
