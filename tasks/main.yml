@@ -29,5 +29,15 @@
 - name: Start argus
   service:
     name: "{{ argus_service }}"
-    enabled: true
+    enabled: yes
     state: started
+  when:
+    - argus_service_enable
+
+- name: Stop argus
+  service:
+    name: "{{ argus_service }}"
+    enabled: no
+    state: stopped
+  when:
+    - not argus_service_enable
