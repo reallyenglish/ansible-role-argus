@@ -1,0 +1,2 @@
+- name: reallyenglish.cyrus-sasl
+  src: https://github.com/reallyenglish/ansible-role-cyrus-sasl/archive/issue_1.tar.gz

@@ -1,12 +1,13 @@
 - hosts: localhost
   roles:
+    - reallyenglish.cyrus-sasl
     - ansible-role-argus
   vars:
-    argus_sasl_user:
+    cyrus_sasl_user:
       foo:
         domain: reallyenglish.com
+        appname: ""
         password: password
-        appname: argus
         state: present
     argus_config:
       ARGUS_CHROOT: "{{ argus_log_dir }}"
