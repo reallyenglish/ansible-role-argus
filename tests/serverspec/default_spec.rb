@@ -2,7 +2,6 @@ require "spec_helper"
 require "serverspec"
 
 package = "argus"
-client_package = "argus-client"
 service = "argus"
 config  = "/etc/argus.conf"
 user    = "argus"
@@ -22,7 +21,6 @@ when "freebsd"
   default_group = "wheel"
   package = "argus3"
   package = "argus-sasl"
-  client_package = "argus-clients-sasl"
   sasldb_file = "/usr/local/etc/sasldb2.db"
   sasldblistusers_command = "sasldblistusers2"
 end
@@ -40,10 +38,6 @@ end
 describe package(package) do
   it { should be_installed }
 end 
-
-describe package(client_package) do
-  it { should be_installed }
-end
 
 describe file(config) do
   it { should be_file }

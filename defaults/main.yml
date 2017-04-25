@@ -3,7 +3,6 @@ argus_group: "{{ __argus_group }}"
 argus_log_dir: /var/log/argus
 argus_service: "{{ __argus_service }}"
 argus_package: "{{ __argus_package }}"
-argus_client_package: "{{ __argus_client_package }}"
 argus_conf_dir: "{{ __argus_conf_dir }}"
 argus_conf_file: "{{ __argus_conf_dir }}/argus.conf"
 argus_pid_dir: "{{ __argus_pid_dir }}"
