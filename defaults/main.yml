@@ -7,6 +7,7 @@ argus_conf_dir: "{{ __argus_conf_dir }}"
 argus_conf_file: "{{ __argus_conf_dir }}/argus.conf"
 argus_pid_dir: "{{ __argus_pid_dir }}"
 argus_pid_file: "{{ __argus_pid_dir }}/{{ argus_service }}.pid"
+argus_service_enable: true
 
 argus_saslpassword_command: "{{ __argus_saslpassword_command }}"
 argus_sasldblistusers_command: "{{ __argus_sasldblistusers_command }}"

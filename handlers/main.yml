@@ -4,3 +4,5 @@
   service:
     name: argus
     state: restarted
+  when:
+    - argus_service_enable
