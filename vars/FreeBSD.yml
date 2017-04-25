@@ -4,6 +4,3 @@ __argus_service: argus
 __argus_package: net-mgmt/argus3
 __argus_conf_dir: /usr/local/etc
 __argus_pid_dir: /var/run
-__argus_saslpassword_command: saslpasswd2
-__argus_sasldblistusers_command: sasldblistusers2
-__argus_sasldb_file: /usr/local/etc/sasldb2

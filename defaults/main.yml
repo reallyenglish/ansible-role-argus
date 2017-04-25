@@ -11,5 +11,4 @@ argus_service_enable: true
 
 argus_flags: ""
 
-argus_sasl_user: {}
 argus_config: {}
