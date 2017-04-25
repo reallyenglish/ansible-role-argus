@@ -36,4 +36,4 @@
 
     # XXX the default in rc.d script assumes the file name is "argus.pid", which is
     # not always the case
-    argus_pid_file: "{{ argus_pid_dir }}/argus.em0.1.pid"
+    argus_pid_file: "{{ argus_pid_dir }}/argus.em0.*.pid"
