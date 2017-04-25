@@ -8,6 +8,7 @@ user    = "argus"
 group   = "argus"
 ports   = [ 561 ]
 log_dir = "/var/log/argus"
+pid_file = "/var/run/argus.em0.1.pid"
 interface = "ind:eth0"
 default_user = "root"
 default_group = "root"
@@ -32,6 +33,7 @@ when "freebsd"
     it { should be_mode 644 }
     it { should be_owned_by default_user }
     it { should be_grouped_into default_group }
+    its(:content) { should match(/^argus_pidfile="#{ Regexp.escape(pid_file) }"$/) }
   end
 end
 
