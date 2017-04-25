@@ -1,6 +1,6 @@
 # ansible-role-argus
 
-A brief description of the role goes here.
+Installs and configures `argus(8)`.
 
 # Requirements
 
@@ -14,7 +14,7 @@ None
 
 # Dependencies
 
-None
+* reallyenglish.cyrus-sasl
 
 # Example Playbook
 
