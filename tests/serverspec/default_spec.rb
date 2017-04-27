@@ -91,13 +91,18 @@ end
 
 describe file(sasldb_file) do
   it { should be_file }
-  it { should be_mode 600 }
+  it { should be_mode 640 }
   it { should be_owned_by default_user }
-  it { should be_grouped_into default_group }
+  it { should be_grouped_into group }
 end
 
 describe command(sasldblistusers_command) do
   its(:stdout) { should match(/^foo@reallyenglish\.com: userPassword$/) }
   its(:stderr) { should match(/^$/) }
+  its(:exit_status) { should eq 0 }
+end
+
+describe command("ra -S localhost -N 1") do
+  its(:stderr) { should eq "" }
   its(:exit_status) { should eq 0 }
 end
