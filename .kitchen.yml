@@ -45,6 +45,11 @@ platforms:
       extra_vars:
         ansible_python_interpreter: '/usr/local/bin/python'
 
+  - name: centos-7.3-amd64
+    driver:
+      box: trombik/ansible-centos-7.3-x86_64
+      box_check_update: false
+
 suites:
   - name: default
     provisioner:

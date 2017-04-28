@@ -1,0 +1,9 @@
+---
+
+- name: Create symlink to /usr/lib64/sasl2
+  file: 
+    src: /usr/lib64/sasl2
+    dest: /usr/lib/sasl2
+    state: link
+  when:
+    - ansible_architecture == 'x86_64'

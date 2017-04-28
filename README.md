@@ -2,6 +2,11 @@
 
 Installs and configures `argus(8)`.
 
+## Missing Ubuntu support
+
+`deb` packages for our targeted Ubuntu releases are version 2.x, which has been
+officially discouraged.
+
 # Requirements
 
 None
@@ -69,9 +74,31 @@ argus_config:
 | `__argus_conf_dir` | `/usr/local/etc` |
 | `__argus_pid_dir` | `/var/run` |
 
+## OpenBSD
+
+| Variable | Default |
+|----------|---------|
+| `__argus_user` | `_argus` |
+| `__argus_group` | `_argus` |
+| `__argus_service` | `argus` |
+| `__argus_package` | `argus` |
+| `__argus_conf_dir` | `/etc` |
+| `__argus_pid_dir` | `/var/run` |
+
+## RedHat
+
+| Variable | Default |
+|----------|---------|
+| `__argus_user` | `argus` |
+| `__argus_group` | `argus` |
+| `__argus_service` | `argus` |
+| `__argus_package` | `argus` |
+| `__argus_conf_dir` | `/etc` |
+| `__argus_pid_dir` | `/var/run` |
+
 # Dependencies
 
-None
+* reallyenglish.redhat-repo (RedHat only)
 
 # Example Playbook
 
@@ -80,8 +107,15 @@ None
   roles:
     - ansible-role-argus
     - reallyenglish.argus-clients
-    - reallyenglish.cyrus-sasl
+    - { role: reallyenglish.cyrus-sasl, when: ansible_os_family == 'FreeBSD' or ansible_os_family == 'RedHat' }
   vars:
+    redhat_repo_extra_packages:
+      - epel-release
+    redhat_repo:
+      epel:
+        mirrorlist: "http://mirrors.fedoraproject.org/mirrorlist?repo=epel-{{ ansible_distribution_major_version }}&arch={{ ansible_architecture }}"
+        gpgcheck: yes
+        enabled: yes
     cyrus_sasl_config:
       argus:
         pwcheck_method: auxprop

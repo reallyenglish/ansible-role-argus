@@ -1,0 +1,25 @@
+---
+
+- name: Install argus
+  yum:
+    name: "{{ argus_package }}"
+    state: present
+
+- name: Install cyrus-sasl-md5
+  # the rpm in EPEL lacks a run-time dependency
+  yum:
+    name: cyrus-sasl-md5
+    state: present
+
+- name: Create argus group
+  group:
+    name: "{{ argus_group }}"
+
+- name: Add argus user
+  user:
+    name: "{{ argus_user }}"
+    group: "{{ argus_group }}"
+    shell: /sbin/nologin
+    createhome: no
+    state: present
+    home: "{{ argus_log_dir }}"

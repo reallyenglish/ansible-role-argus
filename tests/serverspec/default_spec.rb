@@ -8,30 +8,38 @@ user    = "argus"
 group   = "argus"
 ports   = [ 561 ]
 log_dir = "/var/log/argus"
-pid_file = "/var/run/argus.em0.*.pid"
+pid_file = "/var/run/argus.eth0.*.pid"
 interface = "ind:eth0"
 default_user = "root"
 default_group = "root"
-sasldb_file = "/etc/sasldb2.db"
-sasldblistusers_command = "sasldblistusers"
+sasldb_file = "/etc/sasldb2"
+sasldblistusers_command = "sasldblistusers2"
 monitor_id_regex = /default-#{ Regexp.escape(os[:family]) }-.*/
 
 case os[:family]
+when "redhat"
+  monitor_id_regex = /default-centos-.*/
 when "openbsd"
   user = "_argus"
   group = "_argus"
   interface = "ind:em0"
   default_group = "wheel"
+  pid_file = "/var/run/argus.em0.*.pid"
 when "freebsd"
   config = "/usr/local/etc/argus.conf"
   interface = "ind:em0"
   default_group = "wheel"
   package = "net-mgmt/argus3"
   sasldb_file = "/usr/local/etc/sasldb2.db"
-  sasldblistusers_command = "sasldblistusers2"
+  pid_file = "/var/run/argus.em0.*.pid"
 end
 
 case os[:family]
+when "redhat"
+  describe file("/usr/lib/sasl2") do
+    it { should be_symlink }
+    it { should be_linked_to "/usr/lib64/sasl2" }
+  end
 when "freebsd"
   describe file("/etc/rc.conf.d/argus") do
     it { should be_file }
@@ -95,7 +103,7 @@ ports.each do |p|
 end
 
 case os[:family]
-when "freebsd"
+when "freebsd", "redhat"
   describe file(sasldb_file) do
     it { should be_file }
     it { should be_mode 640 }
@@ -110,7 +118,9 @@ when "freebsd"
   end
 end
 
-describe command("ra -S localhost -N 1") do
+describe command("ra -S 127.0.0.1 -N 1") do
+  # use IPv4 address instead of `localhost` as some distributions default to
+  # `::1`
   its(:stderr) { should eq "" }
   its(:exit_status) { should eq 0 }
 end
