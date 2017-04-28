@@ -14,8 +14,14 @@ default_user = "root"
 default_group = "root"
 sasldb_file = "/etc/sasldb2.db"
 sasldblistusers_command = "sasldblistusers"
+monitor_id_regex = /default-#{ Regexp.escape(os[:family]) }-.*/
 
 case os[:family]
+when "openbsd"
+  user = "_argus"
+  group = "_argus"
+  interface = "ind:em0"
+  default_group = "wheel"
 when "freebsd"
   config = "/usr/local/etc/argus.conf"
   interface = "ind:em0"
@@ -49,7 +55,7 @@ describe file(config) do
   its(:content) { should match(/^ARGUS_FLOW_TYPE="Bidirectional"$/) }
   its(:content) { should match(/^ARGUS_FLOW_KEY="CLASSIC_5_TUPLE"$/) }
   its(:content) { should match(/^ARGUS_DAEMON="yes"$/) }
-  its(:content) { should match(/^ARGUS_MONITOR_ID="default-freebsd-103-amd64"$/) }
+  its(:content) { should match(/^ARGUS_MONITOR_ID="#{ monitor_id_regex }"$/) }
   its(:content) { should match(/^ARGUS_ACCESS_PORT=561$/) }
   its(:content) { should match(/^ARGUS_BIND_IP="127\.0\.0\.1"$/) }
   its(:content) { should match(/^ARGUS_INTERFACE="#{ interface }"$/) }
@@ -88,17 +94,20 @@ ports.each do |p|
   end
 end
 
-describe file(sasldb_file) do
-  it { should be_file }
-  it { should be_mode 640 }
-  it { should be_owned_by default_user }
-  it { should be_grouped_into group }
-end
+case os[:family]
+when "freebsd"
+  describe file(sasldb_file) do
+    it { should be_file }
+    it { should be_mode 640 }
+    it { should be_owned_by default_user }
+    it { should be_grouped_into group }
+  end
 
-describe command(sasldblistusers_command) do
-  its(:stdout) { should match(/^foo@reallyenglish\.com: userPassword$/) }
-  its(:stderr) { should match(/^$/) }
-  its(:exit_status) { should eq 0 }
+  describe command(sasldblistusers_command) do
+    its(:stdout) { should match(/^foo@reallyenglish\.com: userPassword$/) }
+    its(:stderr) { should match(/^$/) }
+    its(:exit_status) { should eq 0 }
+  end
 end
 
 describe command("ra -S localhost -N 1") do

@@ -2,7 +2,7 @@
   roles:
     - ansible-role-argus
     - reallyenglish.argus-clients
-    - reallyenglish.cyrus-sasl
+    - { role: reallyenglish.cyrus-sasl, when: ansible_os_family == 'FreeBSD' }
   vars:
     cyrus_sasl_config:
       argus:

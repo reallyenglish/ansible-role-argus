@@ -1,0 +1,6 @@
+---
+
+- name: Install argus
+  openbsd_pkg:
+    name: "{{ argus_package }}"
+    state: present
