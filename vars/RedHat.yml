@@ -1,0 +1,6 @@
+__argus_user: argus
+__argus_group: argus
+__argus_service: argus
+__argus_package: argus
+__argus_conf_dir: /etc
+__argus_pid_dir: /var/run

@@ -8,24 +8,38 @@ user    = "argus"
 group   = "argus"
 ports   = [ 561 ]
 log_dir = "/var/log/argus"
-pid_file = "/var/run/argus.em0.*.pid"
+pid_file = "/var/run/argus.eth0.*.pid"
 interface = "ind:eth0"
 default_user = "root"
 default_group = "root"
-sasldb_file = "/etc/sasldb2.db"
-sasldblistusers_command = "sasldblistusers"
+sasldb_file = "/etc/sasldb2"
+sasldblistusers_command = "sasldblistusers2"
+monitor_id_regex = /default-#{ Regexp.escape(os[:family]) }-.*/
 
 case os[:family]
+when "redhat"
+  monitor_id_regex = /default-centos-.*/
+when "openbsd"
+  user = "_argus"
+  group = "_argus"
+  interface = "ind:em0"
+  default_group = "wheel"
+  pid_file = "/var/run/argus.em0.*.pid"
 when "freebsd"
   config = "/usr/local/etc/argus.conf"
   interface = "ind:em0"
   default_group = "wheel"
   package = "net-mgmt/argus3"
   sasldb_file = "/usr/local/etc/sasldb2.db"
-  sasldblistusers_command = "sasldblistusers2"
+  pid_file = "/var/run/argus.em0.*.pid"
 end
 
 case os[:family]
+when "redhat"
+  describe file("/usr/lib/sasl2") do
+    it { should be_symlink }
+    it { should be_linked_to "/usr/lib64/sasl2" }
+  end
 when "freebsd"
   describe file("/etc/rc.conf.d/argus") do
     it { should be_file }
@@ -49,7 +63,7 @@ describe file(config) do
   its(:content) { should match(/^ARGUS_FLOW_TYPE="Bidirectional"$/) }
   its(:content) { should match(/^ARGUS_FLOW_KEY="CLASSIC_5_TUPLE"$/) }
   its(:content) { should match(/^ARGUS_DAEMON="yes"$/) }
-  its(:content) { should match(/^ARGUS_MONITOR_ID="default-freebsd-103-amd64"$/) }
+  its(:content) { should match(/^ARGUS_MONITOR_ID="#{ monitor_id_regex }"$/) }
   its(:content) { should match(/^ARGUS_ACCESS_PORT=561$/) }
   its(:content) { should match(/^ARGUS_BIND_IP="127\.0\.0\.1"$/) }
   its(:content) { should match(/^ARGUS_INTERFACE="#{ interface }"$/) }
@@ -88,20 +102,25 @@ ports.each do |p|
   end
 end
 
-describe file(sasldb_file) do
-  it { should be_file }
-  it { should be_mode 640 }
-  it { should be_owned_by default_user }
-  it { should be_grouped_into group }
+case os[:family]
+when "freebsd", "redhat"
+  describe file(sasldb_file) do
+    it { should be_file }
+    it { should be_mode 640 }
+    it { should be_owned_by default_user }
+    it { should be_grouped_into group }
+  end
+
+  describe command(sasldblistusers_command) do
+    its(:stdout) { should match(/^foo@reallyenglish\.com: userPassword$/) }
+    its(:stderr) { should match(/^$/) }
+    its(:exit_status) { should eq 0 }
+  end
 end
 
-describe command(sasldblistusers_command) do
-  its(:stdout) { should match(/^foo@reallyenglish\.com: userPassword$/) }
-  its(:stderr) { should match(/^$/) }
-  its(:exit_status) { should eq 0 }
-end
-
-describe command("ra -S localhost -N 1") do
+describe command("ra -S 127.0.0.1 -N 1") do
+  # use IPv4 address instead of `localhost` as some distributions default to
+  # `::1`
   its(:stderr) { should eq "" }
   its(:exit_status) { should eq 0 }
 end

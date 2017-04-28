@@ -2,8 +2,15 @@
   roles:
     - ansible-role-argus
     - reallyenglish.argus-clients
-    - reallyenglish.cyrus-sasl
+    - { role: reallyenglish.cyrus-sasl, when: ansible_os_family == 'FreeBSD' or ansible_os_family == 'RedHat' }
   vars:
+    redhat_repo_extra_packages:
+      - epel-release
+    redhat_repo:
+      epel:
+        mirrorlist: "http://mirrors.fedoraproject.org/mirrorlist?repo=epel-{{ ansible_distribution_major_version }}&arch={{ ansible_architecture }}"
+        gpgcheck: yes
+        enabled: yes
     cyrus_sasl_config:
       argus:
         pwcheck_method: auxprop
