@@ -22,8 +22,4 @@ galaxy_info:
   galaxy_tags:
     - networking
 dependencies:
-  # comment out dependecies for now. on my local machine, with these two lines
-  # causes that the dependant roles are always played before the depending
-  # role.
-  #- { role: reallyenglish.cyrus-sasl }
-  #- { role: reallyenglish.argus-clients }
+#  - { role: username.common, some_parameter: 3 }
