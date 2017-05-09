@@ -18,6 +18,8 @@ None
 | `argus_user` | user of `argus` | `{{ __argus_user }}` |
 | `argus_group` | group of `argus` | `{{ __argus_group }}` |
 | `argus_log_dir` | path to log directory | `/var/log/argus` |
+| `argus_log_dir_mode` | permission of log directory | `0755` |
+| `argus_log_dir_group` | group of log directory | `{{ argus_group }}` |
 | `argus_service` | service name of `argus` | `{{ __argus_service }}` |
 | `argus_package` | package name of `argus` | `{{ __argus_package }}` |
 | `argus_conf_dir` | path to directory where `argus.conf` resides | `{{ __argus_conf_dir }}` |
@@ -130,6 +132,7 @@ argus_config:
         state: present
     cyrus_sasl_sasldb_group: argus
     cyrus_sasl_sasldb_file_permission: "0640"
+    argus_log_dir_mode: "0775"
     argus_config:
       ARGUS_CHROOT: "{{ argus_log_dir }}"
       ARGUS_FLOW_TYPE: Bidirectional

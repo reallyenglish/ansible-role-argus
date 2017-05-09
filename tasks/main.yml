@@ -10,9 +10,9 @@
 - name: Create log directory
   file:
     path: "{{ argus_log_dir }}"
-    mode: 0755
+    mode: "{{ argus_log_dir_mode }}"
     owner: "{{ argus_user }}"
-    group: "{{ argus_group }}"
+    group: "{{ argus_log_dir_group }}"
     state: directory
   notify: Restart argus
 
