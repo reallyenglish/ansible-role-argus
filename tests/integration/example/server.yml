@@ -9,4 +9,53 @@
 
   pre_tasks:
   roles:
-    - argus
+    - name: reallyenglish.cyrus-sasl
+    - name: reallyenglish.argus-clients
+    - name: ansible-role-argus
+  vars:
+    cyrus_sasl_config:
+      argus:
+        pwcheck_method: auxprop
+        auxprop_plugin: sasldb
+        mech_list: DIGEST-MD5
+    cyrus_sasl_saslauthd_enable: no
+    cyrus_sasl_user:
+      foo:
+        domain: reallyenglish.com
+        appname: "argus"
+        password: password
+        state: present
+    cyrus_sasl_sasldb_file_permission: "0644"
+    argus_log_dir_mode: "0775"
+    argus_config:
+      ARGUS_CHROOT: "{{ argus_log_dir }}"
+      ARGUS_FLOW_TYPE: Bidirectional
+      ARGUS_FLOW_KEY: CLASSIC_5_TUPLE
+      ARGUS_DAEMON: "yes"
+      ARGUS_MONITOR_ID: "{{ ansible_fqdn }}"
+      ARGUS_ACCESS_PORT: 561
+      ARGUS_BIND_IP: "{{ ansible_em1.ipv4[0].address }}"
+      ARGUS_INTERFACE: "ind:em1"
+      ARGUS_SETUSER_ID: "{{ argus_user }}"
+      ARGUS_SETGROUP_ID: "{{ argus_group }}"
+      ARGUS_OUTPUT_FILE: "{{ argus_log_dir }}/argus.ra"
+      ARGUS_FLOW_STATUS_INTERVAL: 5
+      ARGUS_MAR_STATUS_INTERVAL: 60
+      ARGUS_DEBUG_LEVEL: 0
+      ARGUS_GENERATE_RESPONSE_TIME_DATA: "yes"
+      ARGUS_GENERATE_PACKET_SIZE: "yes"
+      ARGUS_GENERATE_APPBYTE_METRIC: "yes"
+      ARGUS_GENERATE_TCP_PERF_METRIC: "yes"
+      ARGUS_GENERATE_BIDIRECTIONAL_TIMESTAMPS: "yes"
+      ARGUS_FILTER: ip
+      ARGUS_TRACK_DUPLICATES: "yes"
+      ARGUS_SET_PID: "yes"
+      ARGUS_PID_PATH: "{{ argus_pid_dir }}"
+      ARGUS_MIN_SSF: 40
+      ARGUS_MAX_SSF: 128
+    argus_pid_file: "{{ argus_pid_dir }}/argus.em1.*.pid"
+    argus_clients_config:
+      RA_MIN_SSF: 40
+      RA_MAX_SSF: 128
+      RA_USER_AUTH: "foo@reallyenglish.com/foo@reallyenglish.com"
+      RA_AUTH_PASS: "password"
