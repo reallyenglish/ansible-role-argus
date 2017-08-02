@@ -6,7 +6,7 @@ service = "argus"
 config  = "/etc/argus.conf"
 user    = "argus"
 group   = "argus"
-ports   = [ 561 ]
+ports   = [561]
 log_dir = "/var/log/argus"
 pid_file = "/var/run/argus.eth0.*.pid"
 interface = "ind:eth0"
@@ -52,7 +52,7 @@ end
 
 describe package(package) do
   it { should be_installed }
-end 
+end
 
 describe file(config) do
   it { should be_file }
@@ -69,7 +69,7 @@ describe file(config) do
   its(:content) { should match(/^ARGUS_INTERFACE="#{ interface }"$/) }
   its(:content) { should match(/^ARGUS_SETUSER_ID="#{ user }"$/) }
   its(:content) { should match(/^ARGUS_SETGROUP_ID="#{ group }"$/) }
-  its(:content) { should match(/^ARGUS_OUTPUT_FILE="#{ Regexp.escape(log_dir)}\/argus\.ra"$/) }
+  its(:content) { should match(/^ARGUS_OUTPUT_FILE="#{ Regexp.escape(log_dir + "/argus.ra") }"$/) }
   its(:content) { should match(/^ARGUS_FLOW_STATUS_INTERVAL=5$/) }
   its(:content) { should match(/^ARGUS_MAR_STATUS_INTERVAL=60$/) }
   its(:content) { should match(/^ARGUS_DEBUG_LEVEL=0$/) }
@@ -81,7 +81,7 @@ describe file(config) do
   its(:content) { should match(/^ARGUS_FILTER="ip"$/) }
   its(:content) { should match(/^ARGUS_TRACK_DUPLICATES="yes"$/) }
   its(:content) { should match(/^ARGUS_SET_PID="yes"$/) }
-  its(:content) { should match(/^ARGUS_PID_PATH="\/var\/run"$/) }
+  its(:content) { should match(/^ARGUS_PID_PATH="#{ Regexp.escape("/var/run") }"$/) }
 end
 
 describe file(log_dir) do
