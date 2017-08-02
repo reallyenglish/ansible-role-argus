@@ -9,4 +9,11 @@
 
   pre_tasks:
   roles:
-    - foo
+    - reallyenglish.argus-clients
+  vars:
+    argus_pid_file: "{{ argus_pid_dir }}/argus.em0.*.pid"
+    argus_clients_config:
+      RA_MIN_SSF: 40
+      RA_MAX_SSF: 128
+      RA_USER_AUTH: "foo@reallyenglish.com/foo@reallyenglish.com"
+      RA_AUTH_PASS: "password"
