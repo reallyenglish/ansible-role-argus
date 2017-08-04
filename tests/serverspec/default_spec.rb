@@ -14,11 +14,11 @@ default_user = "root"
 default_group = "root"
 sasldb_file = "/etc/sasldb2"
 sasldblistusers_command = "sasldblistusers2"
-monitor_id_regex = /default-#{ Regexp.escape(os[:family]) }-.*/
+monitor_id_regex = /(?:default|include-role)-#{ Regexp.escape(os[:family]) }-.*/
 
 case os[:family]
 when "redhat"
-  monitor_id_regex = /default-centos-.*/
+  monitor_id_regex = /(?:default|include-role)-centos-.*/
 when "openbsd"
   user = "_argus"
   group = "_argus"

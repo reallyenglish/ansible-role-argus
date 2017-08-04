@@ -27,9 +27,16 @@ None
 | `argus_pid_dir` | path to PID directory | `{{ __argus_pid_dir }}` |
 | `argus_pid_file` | path to PID file | `{{ __argus_pid_dir }}/{{ argus_service }}.pid` |
 | `argus_service_enable` | enable `argus` service when `true` | `true` |
+| `argus_include_role_cyrus_sasl` | when `yes`, the role includes and execute `reallyenglish.cyrus_sasl` (see below) | `no` |
 | `argus_flags` | not used yet | `""` |
 | `argus_config` | a dict of `argus.conf` (see below) | `{}` |
 
+## `argus_include_role_cyrus_sasl`
+
+When `yes`, the role includes and execute
+[`reallyenglish.cyrus-sasl`](https://github.com/reallyenglish/ansible-role-cyrus-sasl)
+during the play, which makes it possible to manage SASL database without ugly
+hacks. This is only supported in `ansible` version _at least_ 2.2 and later.
 
 ## `argus_config`
 
@@ -107,9 +114,11 @@ argus_config:
 ```yaml
 - hosts: localhost
   roles:
+    # this is soft dependency
+    - name: reallyenglish.redhat-repo
+      when: ansible_os_family == 'RedHat'
     - ansible-role-argus
     - reallyenglish.argus-clients
-    - { role: reallyenglish.cyrus-sasl, when: ansible_os_family == 'FreeBSD' or ansible_os_family == 'RedHat' }
   vars:
     redhat_repo_extra_packages:
       - epel-release
@@ -130,8 +139,9 @@ argus_config:
         appname: "argus"
         password: password
         state: present
-    cyrus_sasl_sasldb_group: argus
+    cyrus_sasl_sasldb_group: "{{ argus_group }}"
     cyrus_sasl_sasldb_file_permission: "0640"
+    argus_include_role_cyrus_sasl: yes
     argus_log_dir_mode: "0775"
     argus_config:
       ARGUS_CHROOT: "{{ argus_log_dir }}"

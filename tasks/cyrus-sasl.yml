@@ -1,0 +1,5 @@
+---
+
+- name: Include role reallyenglish.cyrus-sasl
+  include_role:
+    name: reallyenglish.cyrus-sasl
