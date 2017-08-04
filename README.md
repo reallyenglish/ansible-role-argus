@@ -114,9 +114,11 @@ argus_config:
 ```yaml
 - hosts: localhost
   roles:
+    # this is soft dependency
+    - name: reallyenglish.redhat-repo
+      when: ansible_os_family == 'RedHat'
     - ansible-role-argus
     - reallyenglish.argus-clients
-    - { role: reallyenglish.cyrus-sasl, when: ansible_os_family == 'FreeBSD' or ansible_os_family == 'RedHat' }
   vars:
     redhat_repo_extra_packages:
       - epel-release
@@ -137,8 +139,9 @@ argus_config:
         appname: "argus"
         password: password
         state: present
-    cyrus_sasl_sasldb_group: argus
+    cyrus_sasl_sasldb_group: "{{ argus_group }}"
     cyrus_sasl_sasldb_file_permission: "0640"
+    argus_include_role_cyrus_sasl: yes
     argus_log_dir_mode: "0775"
     argus_config:
       ARGUS_CHROOT: "{{ argus_log_dir }}"

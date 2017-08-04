@@ -58,17 +58,3 @@ suites:
     verifier:
       name: shell
       command: rspec -c -f d -I tests/serverspec tests/serverspec/default_spec.rb
-    excludes:
-      - freebsd-10.3-amd64
-      - centos-7.3-amd64
-
-  - name: include_role
-    provisioner:
-      name: ansible_playbook
-      playbook: tests/serverspec/include_role.yml
-    verifier:
-      name: shell
-      command: rspec -c -f d -I tests/serverspec tests/serverspec/default_spec.rb
-    includes:
-      - freebsd-10.3-amd64
-      - centos-7.3-amd64
