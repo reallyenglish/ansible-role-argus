@@ -10,6 +10,7 @@ argus_conf_file: "{{ __argus_conf_dir }}/argus.conf"
 argus_pid_dir: "{{ __argus_pid_dir }}"
 argus_pid_file: "{{ __argus_pid_dir }}/{{ argus_service }}.pid"
 argus_service_enable: true
+argus_include_role_cyrus_sasl: no
 
 argus_flags: ""
 

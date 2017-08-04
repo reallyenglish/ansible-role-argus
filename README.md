@@ -27,9 +27,16 @@ None
 | `argus_pid_dir` | path to PID directory | `{{ __argus_pid_dir }}` |
 | `argus_pid_file` | path to PID file | `{{ __argus_pid_dir }}/{{ argus_service }}.pid` |
 | `argus_service_enable` | enable `argus` service when `true` | `true` |
+| `argus_include_role_cyrus_sasl` | when `yes`, the role includes and execute `reallyenglish.cyrus_sasl` (see below) | `no` |
 | `argus_flags` | not used yet | `""` |
 | `argus_config` | a dict of `argus.conf` (see below) | `{}` |
 
+## `argus_include_role_cyrus_sasl`
+
+When `yes`, the role includes and execute
+[`reallyenglish.cyrus-sasl`](https://github.com/reallyenglish/ansible-role-cyrus-sasl)
+during the play, which makes it possible to manage SASL database without ugly
+hacks. This is only supported in `ansible` version _at least_ 2.2 and later.
 
 ## `argus_config`
 
